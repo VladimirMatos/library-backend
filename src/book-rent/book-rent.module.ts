@@ -1,14 +1,15 @@
 import { Module } from '@nestjs/common';
-import { BookRentService } from './book-rent.service';
-import { BookRentController } from './book-rent.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { BookRent } from './book-rent.entity';
-import { BookModule } from 'src/book/book.module';
-import { UsersModule } from 'src/users/users.module';
+import { BookModule } from '@/bookModule/book.module';
+import { UsersModule } from '@/userModule/users.module';
+import { BookRent } from '@/bookRentEntity/book-rent.entity';
+import { BookRentService } from '@/bookRentService/book-rent.service';
+import { BookRentController } from '@/bookRentController/book-rent.controller';
+import { BookRentRepository } from '@/bookRentRepository/book-rent.repository';
 
 @Module({
   imports: [BookModule, UsersModule, TypeOrmModule.forFeature([BookRent])],
-  providers: [BookRentService],
+  providers: [BookRentService, BookRentRepository],
   controllers: [BookRentController],
 })
 export class BookRentModule {}

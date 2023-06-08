@@ -5,10 +5,19 @@ import * as session from 'express-session';
 import * as passport from 'passport';
 import { TypeormStore } from 'connect-typeorm';
 import { DataSource } from 'typeorm';
-import { Session } from './auth/session.entity';
+import { Session } from '@/authEntity/session.entity';
+import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
+  const config = new DocumentBuilder()
+    .addServer('http://localhost:3001/api')
+    .setTitle('E-Library')
+    .setDescription('The e-library documentation')
+    .setVersion('1.0')
+    .build();
+  const document = SwaggerModule.createDocument(app, config);
+  SwaggerModule.setup('api/doc', app, document);
   const sessionRepository = app.get(DataSource).getRepository(Session);
   app.setGlobalPrefix('api');
   app.useGlobalPipes(

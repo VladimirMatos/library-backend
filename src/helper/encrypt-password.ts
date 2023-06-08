@@ -5,8 +5,11 @@ export const encPassword = (password: string) => {
   return pass;
 };
 
-export const validatorPassword = (password: string, currentPass: string) => {
-  const pass = compare(password, currentPass);
+export const validatorPassword = async (
+  password: string,
+  currentPass: string,
+) => {
+  const pass = await compare(password, currentPass);
 
   return pass;
 };

@@ -1,73 +1,67 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="200" alt="Nest Logo" /></a>
-</p>
+# Library/E-Books
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+This is a project to test my skills using React and Nodejs.
+This project is for renting and reading books virtually where you can register and be the author
+of the books shown or you can be a reader of the many that exist
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://coveralls.io/github/nestjs/nest?branch=master" target="_blank"><img src="https://coveralls.io/repos/github/nestjs/nest/badge.svg?branch=master#9" alt="Coverage" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+### Built With
 
-## Description
+- [![NestJs][Nestjs]][Nest-url]
+- [![Docker][Docker]][Docker-url]
+- [![MySql][MySql]][mysql-url]
+- [![Swagger][Swagger]][swagger-url]
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+[Nestjs]: https://img.shields.io/badge/nestjs-000000?style=for-the-badge&logo=nestjs&logoColor=red
+[Nest-url]: https://nestjs.com/
+[Docker]: https://img.shields.io/badge/docker-000000?style=for-the-badge&logo=docker&logoColor=blue
+[Docker-url]: https://www.docker.com/
+[MySql]: https://img.shields.io/badge/mysql-000000?style=for-the-badge&logo=mysql&logoColor=blue
+[mysql-url]: https://www.mysql.com/
+[Swagger]: https://img.shields.io/badge/swagger-000000?style=for-the-badge&logo=swagger&logoColor=green
+[swagger-url]: https://swagger.io/
 
-## Installation
+<!-- GETTING STARTED -->
 
-```bash
-$ npm install
+## Getting Started
+
+### Installation
+
+1. Clone the repo
+   ```sh
+   git clone https://github.com/VladimirMatos/library-backend
+   ```
+2. Create docker image
+
+   ```sh
+    docker-compose build
+    docker-compose up -d
+   ```
+
+3. Create database using this name: "library"(It is necessary to use this name)
+
+4. Run again
+
+```sh
+   docker-compose build
+   docker-compose up -d
 ```
 
-## Running the app
+5. Create tables
+   ```sh
+    docker exec -it library npm run migration:run
+   ```
+6. Generate SEED
 
-```bash
-# development
-$ npm run start
-
-# watch mode
-$ npm run start:dev
-
-# production mode
-$ npm run start:prod
+```sh
+  POST: localhost:3001/api/roles/
+  POST: localhost:3001/api/category
 ```
 
-## Test
-
-```bash
-# unit tests
-$ npm run test
-
-# e2e tests
-$ npm run test:e2e
-
-# test coverage
-$ npm run test:cov
-```
-
-## Support
-
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
-
-## Stay in touch
-
-- Author - [Kamil Myśliwiec](https://kamilmysliwiec.com)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
-
-## License
-
-Nest is [MIT licensed](LICENSE).
+7. For use the api
+   ```sh
+      http://localhost:3001/api/
+   ```
+8. Use API documentary
+   ```sh
+     http://localhost:3001/
+   ```

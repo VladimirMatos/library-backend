@@ -1,7 +1,8 @@
 import { HttpException, Inject } from '@nestjs/common';
 import { PassportSerializer } from '@nestjs/passport';
-import { User } from 'src/users/user.entity';
-import { UsersService } from 'src/users/users.service';
+import { UserDoc } from '@/userDoc/user.doc';
+import { User } from '@/userEntity/user.entity';
+import { UsersService } from '@/userService/users.service';
 
 export class SessionSerializer extends PassportSerializer {
   constructor(
@@ -16,9 +17,10 @@ export class SessionSerializer extends PassportSerializer {
 
   async deserializeUser(
     user: User,
-    done: (err, user: User | HttpException) => void,
+    done: (err, user: UserDoc | HttpException) => void,
   ) {
     const userFound = await this.userServices.getOneUserById(user.id);
+
     return userFound ? done(null, userFound) : done(null, null);
   }
 }

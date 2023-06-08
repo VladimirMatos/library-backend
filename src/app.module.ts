@@ -1,14 +1,14 @@
 import { Module } from '@nestjs/common';
-import { UsersModule } from './users/users.module';
+import { UsersModule } from '@/userModule/users.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { RolesModule } from './roles/roles.module';
-import { AuthModule } from './auth/auth.module';
+import { RolesModule } from '@/rolesModule/roles.module';
+import { AuthModule } from '@/authModule/auth.module';
 import { PassportModule } from '@nestjs/passport';
 import { dataSourceOptions } from 'src/database/data-source';
-import { CategoryModule } from './category/category.module';
-import { BookPageModule } from './book-page/book-page.module';
-import { BookModule } from './book/book.module';
-import { BookRentModule } from './book-rent/book-rent.module';
+import { CategoryModule } from '@/categoryModule/category.module';
+import { BookPageModule } from '@/bookPageModule/book-page.module';
+import { BookModule } from '@/bookModule/book.module';
+import { BookRentModule } from '@/bookRentModule/book-rent.module';
 
 @Module({
   imports: [
