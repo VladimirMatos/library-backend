@@ -9,6 +9,7 @@ import { UsersService } from '@/userService/users.service';
 import { BookRentDoc } from '@/bookRentDoc/book-rent.doc';
 import { plainToInstance } from 'class-transformer';
 import { BookRentRepository } from '@/bookRentRepository/book-rent.repository';
+import { Book } from '@/bookEntity/book.entity';
 
 @Injectable()
 export class BookRentService {
@@ -27,15 +28,7 @@ export class BookRentService {
       bookRent.userId,
     );
 
-    if (userFound.status == HttpStatus.NOT_FOUND) {
-      return userFound;
-    }
-
     const bookCheck: any = await this.bookService.getBookById(bookRent.bookId);
-
-    if (bookCheck.status == HttpStatus.NOT_FOUND) {
-      return bookCheck;
-    }
 
     const newRent = this.bookRentRepository.create();
     newRent.book = bookCheck;
@@ -47,9 +40,7 @@ export class BookRentService {
     return rentPlain;
   }
 
-  async retornBook(
-    bookId: number,
-  ): Promise<HttpException | { message?: string }> {
+  async retornBook(bookId: number): Promise<{ message?: string }> {
     const rentCheck = await this.customRepository.getBookRentStatusFalse(
       bookId,
     );
@@ -72,7 +63,7 @@ export class BookRentService {
     };
   }
 
-  async getOneBookRent(bookId: number): Promise<BookRentDoc | HttpException> {
+  async getOneBookRent(bookId: number): Promise<BookRentDoc> {
     const rentCheck = await this.customRepository.getBookRentStatusTrue(bookId);
 
     const bookRentPlain = plainToInstance(BookRentDoc, rentCheck);

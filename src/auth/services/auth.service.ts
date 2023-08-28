@@ -1,10 +1,11 @@
 import {
+  BadRequestException,
   HttpException,
   HttpStatus,
   Injectable,
   UseGuards,
 } from '@nestjs/common';
-import { validatorPassword } from 'src/helper/encrypt-password';
+import { validatorPassword } from 'helper/encrypt-password';
 import { LocalAuthGuard } from '../utils/LocalGuard';
 import { LoginDto } from '@/authDto/auth.dto';
 import { UsersService } from '@/userService/users.service';
@@ -22,17 +23,14 @@ export class AuthService {
   ): Promise<UserDoc | HttpException> {
     const userFound: any = await this.userService.getOneUserByEmail(email);
 
-    if (userFound.status == HttpStatus.NOT_FOUND) {
+    if (userFound?.status) {
       return userFound;
     }
 
     const passValidator = await validatorPassword(password, userFound.password);
 
     if (!passValidator) {
-      return new HttpException(
-        'Wrong username or password.',
-        HttpStatus.FORBIDDEN,
-      );
+      throw new BadRequestException('Wrong username or password.');
     }
 
     const userPlain = plainToInstance(UserDoc, userFound);

@@ -7,7 +7,6 @@ import {
   UseGuards,
 } from '@nestjs/common';
 
-import { AuthenticateGuard } from 'src/auth/utils/LocalGuard';
 import { BookRentService } from '@/bookRentService/book-rent.service';
 import { CreateBookRentDto } from '@/bookRentDto/book-rent.dto';
 import {
@@ -17,6 +16,7 @@ import {
   ApiTags,
 } from '@nestjs/swagger';
 import { BookRentDoc } from '@/bookRentDoc/book-rent.doc';
+import { AuthenticateGuard } from '@/authModule/utils/LocalGuard';
 
 @ApiTags('book-rent')
 @Controller('book-rent')
@@ -25,7 +25,7 @@ export class BookRentController {
 
   @ApiOkResponse({
     description: 'Book rented',
-    type: BookRentDoc,
+    type: [BookRentDoc],
   })
   @ApiBadRequestResponse({
     description: 'Book cannot be rent',
@@ -35,7 +35,7 @@ export class BookRentController {
   @Post()
   rentBook(
     @Body() book: CreateBookRentDto,
-  ): Promise<BookRentDoc | HttpException | { message?: string }> {
+  ): Promise<BookRentDoc | { message?: string }> {
     return this.bookRentService.createBookRent(book);
   }
 
@@ -47,9 +47,7 @@ export class BookRentController {
   })
   @UseGuards(AuthenticateGuard)
   @Post('/return/:id')
-  returnBook(
-    @Param('id') id: number,
-  ): Promise<HttpException | { message?: string }> {
+  returnBook(@Param('id') id: number): Promise<{ message?: string }> {
     return this.bookRentService.retornBook(id);
   }
 }

@@ -10,7 +10,7 @@ export class RolesController {
 
   @ApiOkResponse({
     description: 'Role found',
-    type: RolesDoc,
+    type: [RolesDoc],
   })
   @ApiBadRequestResponse({
     description: 'Role not found',
@@ -30,12 +30,12 @@ export class RolesController {
     status: 404,
   })
   @Get(':id')
-  getOneRole(@Param('id') id: number): Promise<RolesDoc | HttpException> {
+  getOneRole(@Param('id') id: number): Promise<RolesDoc> {
     return this.roleService.getOneRoles(id);
   }
 
   @ApiOkResponse({
-    type: RolesDoc,
+    type: [RolesDoc],
   })
   @Post()
   createRoles() {

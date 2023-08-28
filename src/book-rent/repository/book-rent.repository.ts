@@ -10,32 +10,35 @@ export class BookRentRepository {
   ) {}
 
   async getBookRentStatusFalse(bookId: number) {
-    const bookRent = await this.bookRentRepository.findOneOrFail({
-      where: {
-        status: false,
-        book: {
-          id: bookId,
+    try {
+      const bookRent = await this.bookRentRepository.findOneOrFail({
+        where: {
+          status: false,
+          book: {
+            id: bookId,
+          },
         },
-      },
-    });
+      });
 
-    if (!bookRent) throw new NotFoundException('Book not found');
-
-    return bookRent;
+      return bookRent;
+    } catch (error) {
+      throw new NotFoundException('Book not found');
+    }
   }
 
   async getBookRentStatusTrue(bookId: number) {
-    const bookRent = await this.bookRentRepository.findOneOrFail({
-      where: {
-        status: true,
-        book: {
-          id: bookId,
+    try {
+      const bookRent = await this.bookRentRepository.findOneOrFail({
+        where: {
+          status: true,
+          book: {
+            id: bookId,
+          },
         },
-      },
-    });
-
-    if (!bookRent) throw new NotFoundException('Book not found');
-
-    return bookRent;
+      });
+      return bookRent;
+    } catch (error) {
+      throw new NotFoundException('Book not found');
+    }
   }
 }

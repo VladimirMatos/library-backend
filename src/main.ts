@@ -9,7 +9,7 @@ import { Session } from '@/authEntity/session.entity';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
+  const app = await NestFactory.create(AppModule, { cors: true });
   const config = new DocumentBuilder()
     .addServer('http://localhost:3001/api')
     .setTitle('E-Library')
@@ -23,6 +23,7 @@ async function bootstrap() {
   app.useGlobalPipes(
     new ValidationPipe({
       whitelist: true,
+      transform: true,
     }),
   );
   app.use(

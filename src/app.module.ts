@@ -4,11 +4,12 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { RolesModule } from '@/rolesModule/roles.module';
 import { AuthModule } from '@/authModule/auth.module';
 import { PassportModule } from '@nestjs/passport';
-import { dataSourceOptions } from 'src/database/data-source';
 import { CategoryModule } from '@/categoryModule/category.module';
 import { BookPageModule } from '@/bookPageModule/book-page.module';
 import { BookModule } from '@/bookModule/book.module';
 import { BookRentModule } from '@/bookRentModule/book-rent.module';
+import { dataSourceOptions } from 'database/data-source';
+import { BannersModule } from '@/bannerModule/banners.module';
 
 @Module({
   imports: [
@@ -23,6 +24,7 @@ import { BookRentModule } from '@/bookRentModule/book-rent.module';
     BookPageModule,
     BookModule,
     BookRentModule,
+    BannersModule,
   ],
 })
 export class AppModule {}

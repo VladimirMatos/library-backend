@@ -1,7 +1,14 @@
-import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  ForbiddenException,
+  HttpException,
+  HttpStatus,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { encPassword } from 'src/helper/encrypt-password';
+import { encPassword } from 'helper/encrypt-password';
 import { User } from '@/userEntity/user.entity';
 import { RolesService } from '@/rolesService/roles.service';
 import { CreateUserDto, UpdateUserDto } from '@/userDto/user.dto';
@@ -32,16 +39,14 @@ export class UsersService {
     return user;
   }
 
-  async createUser(user: CreateUserDto): Promise<UserDoc | HttpException> {
+  async createUser(user: CreateUserDto): Promise<UserDoc> {
     const encPass = encPassword(user.password);
+
     const userObj = { ...user, password: encPass };
-    await this.customRepository.findUserByEmail(user.email);
 
-    const role: any = await this.roleService.getOneRoles(userObj.roleId);
+    await this.customRepository.findUserByEmailRepeted(user.email);
 
-    if (role.status == HttpStatus.NOT_FOUND) {
-      return role;
-    }
+    const role = await this.roleService.getOneRoles(userObj.roleId);
 
     const newUser = this.userRepository.create(userObj);
     newUser.role = role;
@@ -52,7 +57,7 @@ export class UsersService {
     return userPlain;
   }
 
-  async getOneUserById(id: number): Promise<UserDoc | HttpException> {
+  async getOneUserById(id: number): Promise<UserDoc> {
     const userFound = await this.userRepository.findOne({
       where: {
         id,
@@ -60,7 +65,7 @@ export class UsersService {
     });
 
     if (!userFound) {
-      return new HttpException('User not found', HttpStatus.NOT_FOUND);
+      throw new NotFoundException('User not found');
     }
 
     const userPlain = plainToInstance(UserDoc, userFound);
@@ -68,7 +73,9 @@ export class UsersService {
   }
 
   async getOneUserByEmail(email: string) {
-    await this.customRepository.findUserByEmail(email);
+    const user = await this.customRepository.findUserByEmail(email);
+
+    return user;
   }
 
   async updateUser(id: number, user: UpdateUserDto) {

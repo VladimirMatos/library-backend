@@ -1,6 +1,11 @@
-import { HttpException, Injectable } from '@nestjs/common';
+import {
+  HttpException,
+  HttpStatus,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { EntityNotFoundError, Repository } from 'typeorm';
 import { Roles } from '@/rolesEntity/roles.entity';
 import { RolesDoc } from '@/rolesDoc/roles.doc';
 import { plainToInstance } from 'class-transformer';
@@ -17,14 +22,18 @@ export class RolesService {
     return rolesPlain;
   }
 
-  async getOneRoles(id: number): Promise<RolesDoc | HttpException> {
-    const roles = await this.rolesRepository.findOneOrFail({ where: { id } });
+  async getOneRoles(id: number): Promise<RolesDoc> {
+    try {
+      const roles = await this.rolesRepository.findOneOrFail({ where: { id } });
+      const rolesPlain = plainToInstance(RolesDoc, roles);
 
-    const rolesPlain = plainToInstance(RolesDoc, roles);
-    return rolesPlain;
+      return rolesPlain;
+    } catch (err) {
+      throw new NotFoundException('Role not found');
+    }
   }
 
-  createRoles() {
+  async createRoles() {
     const rolesSeed = [
       {
         name: 'ADMIN',
@@ -37,6 +46,9 @@ export class RolesService {
       },
     ];
     const newRoles = this.rolesRepository.create(rolesSeed);
-    return this.rolesRepository.save(newRoles);
+
+    const create = await this.rolesRepository.save(newRoles);
+
+    return create;
   }
 }

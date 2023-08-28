@@ -1,4 +1,9 @@
-import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import {
+  HttpException,
+  HttpStatus,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Book } from '@/bookEntity/book.entity';
@@ -70,7 +75,7 @@ export class BookService {
     return bookPlain;
   }
 
-  async getBookById(id: number): Promise<BookDoc | HttpException> {
+  async getBookById(id: number): Promise<BookDoc> {
     const book = await this.bookRepository.findOne({
       relations: {
         bookPage: true,
@@ -83,7 +88,7 @@ export class BookService {
     });
 
     if (!book) {
-      return new HttpException('Book not found', HttpStatus.NOT_FOUND);
+      throw new NotFoundException('Book not found');
     }
 
     const bookPlain = plainToInstance(BookDoc, book);
@@ -91,20 +96,15 @@ export class BookService {
   }
 
   async updateBook(id: number, book: UpdateBookDto) {
-    const bookCheck: any = await this.getBookById(id);
-
-    if (bookCheck.status == HttpStatus.NOT_FOUND) {
-      return bookCheck;
-    }
+    await this.getBookById(id);
 
     return this.bookRepository.update({ id }, book);
   }
 
-  async getBookAndPage(
-    bookId: number,
-    page: number,
-  ): Promise<BookDoc | HttpException> {
+  async getBookAndPage(bookId: number, page: number): Promise<BookDoc> {
     const book = await this.customReposity.getBookAndPage(bookId, page);
+
+    if (!book) throw new NotFoundException('Book page not found');
 
     const bookPlain = plainToInstance(BookDoc, book);
     return bookPlain;

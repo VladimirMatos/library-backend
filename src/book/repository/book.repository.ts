@@ -9,21 +9,24 @@ export class BookRepository {
   ) {}
 
   async getBookAndPage(bookId: number, page: number) {
-    const book = await this.bookRepository.findOneOrFail({
-      relations: {
-        bookPage: true,
-        author: true,
-        category: true,
-      },
-      where: {
-        id: bookId,
-        bookPage: {
-          page,
+    try {
+      const book = await this.bookRepository.findOneOrFail({
+        relations: {
+          bookPage: true,
+          author: true,
+          category: true,
         },
-      },
-    });
+        where: {
+          id: bookId,
+          bookPage: {
+            page,
+          },
+        },
+      });
 
-    if (!book) throw new NotFoundException('Book not found');
-    return book;
+      return book;
+    } catch (error) {
+      if (!error) throw new NotFoundException('Book not found');
+    }
   }
 }

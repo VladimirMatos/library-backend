@@ -19,7 +19,7 @@
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
     "test:e2e": "jest --config ./test/jest-e2e.json",
     "typeorm": "npm run build && npx typeorm -d dist/database/data-source.js",
-    "migration:generate": "npm run typeorm -- migration:generate ",
+    "migration:generate": "npm run typeorm -- migration:generate",
     "migration:create": "npm run typeorm -- migration:create ",
     "migration:run": "npm run typeorm -- migration:run",
     "migration:revert": "npm run typeorm -- migration:revert"
@@ -43,8 +43,7 @@
     "passport-local": "^1.0.0",
     "reflect-metadata": "^0.1.13",
     "rxjs": "^7.2.0",
-    "typeorm": "^0.3.16",
-    "typeorm-extension": "^2.8.1"
+    "typeorm": "^0.3.16"
   },
   "devDependencies": {
     "@nestjs/cli": "^9.0.0",
@@ -77,7 +76,37 @@
       "json",
       "ts"
     ],
-    "rootDir": "src",
+    "moduleNameMapper": {
+      "^src/(.*)$": "<rootDir>/$1",
+      "@/userService/(.*)": "<rootDir>/users/services/$1",
+      "@/userEntity/(.*)": "<rootDir>/users/entity/$1",
+      "@/bookRentEntity/(.*)": "<rootDir>/book-rent/entity/$1",
+      "@/bookEntity/(.*)": "<rootDir>/book/entity/$1",
+      "@/bookPageEntity/(.*)": "<rootDir>/book-page/entity/$1",
+      "@/categoryEntity/(.*)": "<rootDir>/category/entity/$1",
+      "@/rolesEntity/(.*)": "<rootDir>/roles/entity/$1",
+      "@/rolesService/(.*)": "<rootDir>/roles/services/$1",
+      "@/rolesDoc/(.*)": "<rootDir>/roles/doc/$1",
+      "@/userDoc/(.*)": "<rootDir>/users/doc/$1",
+      "@/bookRentDoc/(.*)": "<rootDir>/book-rent/doc/$1",
+      "@/bookDoc/(.*)": "<rootDir>/book/doc/$1",
+      "@/bookPageDoc/(.*)": "<rootDir>/book-page/doc/$1",
+      "@/categoryDoc/(.*)": "<rootDir>/category/doc/$1",
+      "@/userRepository/(.*)": "<rootDir>/users/repository/$1",
+      "@/rolesModule/(.*)": "<rootDir>/roles/$1",
+      "@/rolesController/(.*)": "<rootDir>/roles/controllers/$1",
+      "@/userController/(.*)": "<rootDir>/users/controllers/$1",
+      "@/userDto/(.*)": "<rootDir>/users/dto/$1",
+      "@/authModule/(.*)": "<rootDir>/auth/$1",
+      "@/bannerModule/(.*)": "<rootDir>/banners/$1",
+      "@/bannerEntity/(.*)": "<rootDir>/banners/entity/$1",
+      "@/bannerService/(.*)": "<rootDir>/banners/services/$1",
+      "@/bannerDto/(.*)": "<rootDir>/banners/dto/$1",
+      "@/bannerDoc/(.*)": "<rootDir>/banners/doc/$1",
+      "@/bannerController/(.*)": "<rootDir>/banners/controllers/$1",
+      "@/bannersRepository/(.*)": "<rootDir>/banners/repository/$1"
+    },
+    "rootDir": "./src",
     "testRegex": ".*\\.spec\\.ts$",
     "transform": {
       "^.+\\.(t|j)s$": "ts-jest"
@@ -86,6 +115,10 @@
       "**/*.(t|j)s"
     ],
     "coverageDirectory": "../coverage",
-    "testEnvironment": "node"
+    "testEnvironment": "node",
+    "moduleDirectories": [
+      "node_modules",
+      "<rootDir>"
+    ]
   }
 }

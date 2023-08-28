@@ -1,4 +1,4 @@
-import { BookPage } from 'src/book-page/entity/book-page.entity';
+import { BookPage } from '@/bookPageEntity/book-page.entity';
 import { BookRent } from '@/bookRentEntity/book-rent.entity';
 import { Category } from '@/categoryEntity/category.entity';
 import { User } from '@/userEntity/user.entity';

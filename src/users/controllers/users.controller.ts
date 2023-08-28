@@ -8,7 +8,6 @@ import {
   Post,
   UseGuards,
 } from '@nestjs/common';
-import { AuthenticateGuard } from 'src/auth/utils/LocalGuard';
 import { UsersService } from '@/userService/users.service';
 import { CreateUserDto, UpdateUserDto } from '@/userDto/user.dto';
 import {
@@ -18,6 +17,7 @@ import {
   ApiTags,
 } from '@nestjs/swagger';
 import { UserDoc } from '@/userDoc/user.doc';
+import { AuthenticateGuard } from '@/authModule/utils/LocalGuard';
 
 @ApiTags('users')
 @Controller('users')
@@ -26,7 +26,7 @@ export class UsersController {
 
   @ApiOkResponse({
     description: 'User found',
-    type: UserDoc,
+    type: [UserDoc],
   })
   @ApiBadRequestResponse({
     description: 'User not found',
@@ -44,7 +44,13 @@ export class UsersController {
     description: 'User cannot be created',
   })
   @Post()
-  createUser(@Body() user: CreateUserDto): Promise<UserDoc | HttpException> {
+  createUser(@Body() user: CreateUserDto): Promise<
+    | UserDoc
+    | {
+        response: string;
+        status: number;
+      }
+  > {
     return this.userService.createUser(user);
   }
 
@@ -55,7 +61,7 @@ export class UsersController {
   @ApiBadRequestResponse({
     description: 'User not found',
   })
-  @UseGuards(AuthenticateGuard)
+  // @UseGuards(AuthenticateGuard)
   @Get(':id')
   getOneUse(@Param('id') id: number): Promise<UserDoc | HttpException> {
     return this.userService.getOneUserById(id);
@@ -67,7 +73,7 @@ export class UsersController {
   @ApiBadRequestResponse({
     description: 'User cannot be updated',
   })
-  @UseGuards(AuthenticateGuard)
+  // @UseGuards(AuthenticateGuard)
   @ApiOkResponse()
   @Patch(':id')
   updateUser(@Param('id') id: number, @Body() user: UpdateUserDto) {

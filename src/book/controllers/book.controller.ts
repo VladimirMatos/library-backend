@@ -8,7 +8,6 @@ import {
   Post,
   UseGuards,
 } from '@nestjs/common';
-import { AuthenticateGuard } from 'src/auth/utils/LocalGuard';
 import { BookService } from '@/bookService/book.service';
 import { Book } from '@/bookEntity/book.entity';
 import { CreateBookDto, UpdateBookDto } from '@/bookDto/book.dto';
@@ -19,6 +18,7 @@ import {
   ApiTags,
 } from '@nestjs/swagger';
 import { BookDoc } from '@/bookDoc/book.doc';
+import { AuthenticateGuard } from '@/authModule/utils/LocalGuard';
 
 @ApiTags('book')
 @Controller('book')
@@ -41,7 +41,7 @@ export class BookController {
 
   @ApiOkResponse({
     description: 'Book found',
-    type: BookDoc,
+    type: [BookDoc],
   })
   @ApiBadRequestResponse({
     description: 'Book not found',
@@ -74,7 +74,7 @@ export class BookController {
     description: 'Book not found',
   })
   @Get(':id')
-  getBookById(@Param('id') id: number): Promise<BookDoc | HttpException> {
+  getBookById(@Param('id') id: number): Promise<BookDoc> {
     return this.bookService.getBookById(id);
   }
 
@@ -86,10 +86,7 @@ export class BookController {
   })
   @UseGuards(AuthenticateGuard)
   @Patch(':id')
-  updateBook(
-    @Param('id') id: number,
-    @Body() book: UpdateBookDto,
-  ): Promise<Book | HttpException> {
+  updateBook(@Param('id') id: number, @Body() book: UpdateBookDto) {
     return this.bookService.updateBook(id, book);
   }
 }

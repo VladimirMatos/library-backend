@@ -1,0 +1,64 @@
+{
+    "compilerOptions": {
+        "baseUrl": "./src",
+        "paths": {
+          "@/*": ["src/*"],
+          "@/userEntity/*": ["users/entity/*"],
+          "@/userService/*": ["users/services/*"],
+          "@/userController/*": ["users/controllers/*"],
+          "@/userDoc/*": ["users/doc/*"],
+          "@/userDto/*": ["users/dto/*"],
+          "@/userRepository/*": ["users/repository/*"],
+          "@/userModule/*": ["users/*"],
+          "@/userTest/*":["users/test/*"],
+    
+          "@/rolesEntity/*": ["roles/entity/*"],
+          "@/rolesService/*": ["roles/services/*"],
+          "@/rolesController/*": ["roles/controllers/*"],
+          "@/rolesDoc/*": ["roles/doc/*"],
+          "@/rolesModule/*": ["roles/*"],
+    
+          "@/categoryEntity/*": ["category/entity/*"],
+          "@/categoryService/*": ["category/services/*"],
+          "@/categoryController/*": ["category/controllers/*"],
+          "@/categoryDoc/*": ["category/doc/*"],
+          "@/categoryModule/*": ["category/*"],
+    
+          "@/bookRentEntity/*": ["book-rent/entity/*"],
+          "@/bookRentService/*": ["book-rent/services/*"],
+          "@/bookRentController/*": ["book-rent/controllers/*"],
+          "@/bookRentDoc/*": ["book-rent/doc/*"],
+          "@/bookRentDto/*": ["book-rent/dto/*"],
+          "@/bookRentRepository/*": ["book-rent/repository/*"],
+          "@/bookRentModule/*": ["book-rent/*"],
+    
+          "@/bookPageEntity/*": ["book-page/entity/*"],
+          "@/bookPageService/*": ["book-page/services/*"],
+          "@/bookPageDoc/*": ["book-page/doc/*"],
+          "@/bookPageModule/*": ["book-page/*"],
+          "@/bookPageDto/*": ["book-page/dto/*"],
+    
+          "@/bookEntity/*": ["book/entity/*"],
+          "@/bookService/*": ["book/services/*"],
+          "@/bookController/*": ["book/controllers/*"],
+          "@/bookDoc/*": ["book/doc/*"],
+          "@/bookDto/*": ["book/dto/*"],
+          "@/bookRepository/*": ["book/repository/*"],
+          "@/bookModule/*": ["book/*"],
+    
+          "@/authEntity/*": ["auth/entity/*"],
+          "@/authService/*": ["auth/services/*"],
+          "@/authDto/*": ["auth/dto/*"],
+          "@/authController/*": ["auth/controllers/*"],
+          "@/authModule/*": ["auth/*"],
+
+          "@/bannerEntity/*": ["banners/entity/*"],
+          "@/bannerService/*": ["banners/services/*"],
+          "@/bannerDto/*": ["banners/dto/*"],
+          "@/bannerDoc/*": ["banners/doc/*"],
+          "@/bannerController/*": ["banners/controllers/*"],
+          "@/bannerModule/*": ["banners/*"],
+          "@/bannersRepository/*": ["banners/repository/*"],
+        },
+    }
+}

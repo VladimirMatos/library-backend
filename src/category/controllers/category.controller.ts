@@ -9,7 +9,7 @@ export class CategoryController {
   constructor(private categoryServices: CategoryService) {}
 
   @ApiOkResponse({
-    type: CategoryDoc,
+    type: [CategoryDoc],
   })
   @Post()
   createCategory(): Promise<CategoryDoc[]> {
@@ -31,7 +31,7 @@ export class CategoryController {
 
   @ApiOkResponse({
     description: 'Category found',
-    type: CategoryDoc,
+    type: [CategoryDoc],
   })
   @ApiBadRequestResponse({
     description: 'Category not found',
