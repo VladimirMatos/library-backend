@@ -4,6 +4,7 @@ import { HttpException, Injectable, NotFoundException } from '@nestjs/common';
 import { Category } from '@/categoryEntity/category.entity';
 import { CategoryDoc } from '@/categoryDoc/category.doc';
 import { plainToInstance } from 'class-transformer';
+import { uploadImage } from 'helper/upload';
 
 @Injectable()
 export class CategoryService {

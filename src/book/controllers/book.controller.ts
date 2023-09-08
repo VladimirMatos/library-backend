@@ -33,9 +33,9 @@ export class BookController {
   @ApiBadRequestResponse({
     description: 'Book cannot be created',
   })
-  @UseGuards(AuthenticateGuard)
+  // @UseGuards(AuthenticateGuard)
   @Post()
-  create(@Body() book: CreateBookDto): Promise<BookDoc | HttpException> {
+  create(@Body() book: CreateBookDto): Promise<BookDoc> {
     return this.bookService.create(book);
   }
 
@@ -76,6 +76,17 @@ export class BookController {
   @Get(':id')
   getBookById(@Param('id') id: number): Promise<BookDoc> {
     return this.bookService.getBookById(id);
+  }
+  @ApiOkResponse({
+    description: 'Book found',
+    type: [BookDoc],
+  })
+  @ApiBadRequestResponse({
+    description: 'Book not found',
+  })
+  @Get('/author/:id')
+  getBookByAuthor(@Param('id') id: number): Promise<BookDoc[]> {
+    return this.bookService.getBookByAuthor(id);
   }
 
   @ApiOkResponse({

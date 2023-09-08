@@ -18,6 +18,9 @@ export class BookDoc {
   totalPage: number;
 
   @ApiProperty()
+  imageUrl: string;
+
+  @ApiProperty()
   @Type(() => CategoryDoc)
   category: CategoryDoc;
 

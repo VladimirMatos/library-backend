@@ -9,7 +9,11 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { UsersService } from '@/userService/users.service';
-import { CreateUserDto, UpdateUserDto } from '@/userDto/user.dto';
+import {
+  CreateUserDto,
+  UpdateUserDto,
+  UploadImageDto,
+} from '@/userDto/user.dto';
 import {
   ApiBadRequestResponse,
   ApiConflictResponse,
@@ -78,5 +82,11 @@ export class UsersController {
   @Patch(':id')
   updateUser(@Param('id') id: number, @Body() user: UpdateUserDto) {
     return this.userService.updateUser(id, user);
+  }
+
+  @ApiOkResponse()
+  @Post('/image')
+  uploadImage(@Body() image: UploadImageDto) {
+    return this.userService.uploadImage(image);
   }
 }

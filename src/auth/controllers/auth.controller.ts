@@ -3,10 +3,12 @@ import { LocalAuthGuard } from '../utils/LocalGuard';
 import { LoginDto } from '@/authDto/auth.dto';
 import { ApiBadRequestResponse, ApiOkResponse, ApiTags } from '@nestjs/swagger';
 import { UserDoc } from '@/userDoc/user.doc';
+import { AuthService } from '@/authService/auth.service';
 
 @ApiTags('auth')
 @Controller('auth')
 export class AuthController {
+  constructor(private authService: AuthService) {}
   @ApiOkResponse({
     description: 'User login',
     type: UserDoc,
@@ -16,9 +18,11 @@ export class AuthController {
   })
   @UseGuards(LocalAuthGuard)
   @Post('/login')
-  login(@Body() user: LoginDto) {
+  async login(@Body() user: LoginDto) {
+    const login = await this.authService.login(user.email, user.password);
+
     return {
-      user: user.email,
+      user: login,
       message: 'Login',
     };
   }

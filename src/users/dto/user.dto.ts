@@ -3,6 +3,7 @@ import {
   IsDefined,
   IsEmail,
   IsNotEmpty,
+  IsNumber,
   IsOptional,
   IsString,
   MinLength,
@@ -40,16 +41,47 @@ export class CreateUserDto {
   @IsNotEmpty()
   @IsDefined()
   roleId: number;
+
+  @ApiProperty()
+  @IsString()
+  @IsNotEmpty()
+  @IsDefined()
+  imageUrl: string;
 }
 
 export class UpdateUserDto {
   @ApiProperty()
   @IsString()
   @IsOptional()
-  firstName: string;
+  firstName?: string;
 
   @ApiProperty()
   @IsString()
   @IsOptional()
-  lastName: string;
+  lastName?: string;
+
+  @ApiProperty()
+  @IsString()
+  @IsOptional()
+  imageUrl?: string;
+}
+
+export class UploadImageDto {
+  @ApiProperty()
+  @IsString()
+  @IsNotEmpty()
+  @IsDefined()
+  base64: string;
+
+  @ApiProperty()
+  @IsString()
+  @IsNotEmpty()
+  @IsDefined()
+  name: string;
+
+  @ApiProperty()
+  @IsNumber()
+  @IsNotEmpty()
+  @IsDefined()
+  id: number;
 }

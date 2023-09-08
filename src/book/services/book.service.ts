@@ -14,6 +14,7 @@ import { CategoryService } from '@/categoryService/category.service';
 import { BookDoc } from '../doc/book.doc';
 import { plainToInstance } from 'class-transformer';
 import { BookRepository } from '@/bookRepository/book.repository';
+import { uploadImage } from 'helper/upload';
 
 @Injectable()
 export class BookService {
@@ -25,29 +26,23 @@ export class BookService {
     private customReposity: BookRepository,
   ) {}
 
-  async create(book: CreateBookDto): Promise<BookDoc | HttpException> {
+  async create(book: CreateBookDto): Promise<BookDoc> {
     const userFound: any = await this.userServices.getOneUserById(
       book.authorId,
     );
-
-    if (userFound.status == HttpStatus.NOT_FOUND) {
-      return userFound;
-    }
 
     const category: any = await this.categoryServices.getOneById(
       book.categoryId,
     );
 
-    if (category.status == HttpStatus.NOT_FOUND) {
-      return category;
-    }
-
     const newBook = this.bookRepository.create(book);
-    const text = {
-      text: book.text,
-    };
-    const booksPage = await this.bookPageServices.create(text);
+    const text = book.text;
 
+    const booksPage = await this.bookPageServices.create({ text });
+
+    const url = await uploadImage({ ...book.image, file: 'book' });
+
+    newBook.imageUrl = url;
     newBook.totalPage = booksPage.count;
     newBook.bookPage = booksPage.BookPage;
     newBook.category = category;
@@ -104,7 +99,14 @@ export class BookService {
   async getBookAndPage(bookId: number, page: number): Promise<BookDoc> {
     const book = await this.customReposity.getBookAndPage(bookId, page);
 
-    if (!book) throw new NotFoundException('Book page not found');
+    const bookPlain = plainToInstance(BookDoc, book);
+    return bookPlain;
+  }
+
+  async getBookByAuthor(authId: number): Promise<BookDoc[]> {
+    const author = await this.userServices.getOneUserById(authId);
+
+    const book = await this.customReposity.getBookByAuthor(author.id);
 
     const bookPlain = plainToInstance(BookDoc, book);
     return bookPlain;

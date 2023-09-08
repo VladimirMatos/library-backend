@@ -27,6 +27,12 @@ export class User {
   @Column()
   password: string;
 
+  @Column({
+    type: 'text',
+    nullable: true,
+  })
+  imageUrl: string;
+
   @OneToOne(() => Roles)
   @JoinColumn()
   role: Roles;

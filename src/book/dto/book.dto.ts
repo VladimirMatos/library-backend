@@ -4,9 +4,24 @@ import {
   IsDefined,
   IsNotEmpty,
   IsNumber,
+  IsObject,
   IsOptional,
   IsString,
 } from 'class-validator';
+
+class imageDto {
+  @ApiProperty()
+  @IsString()
+  @IsNotEmpty()
+  @IsDefined()
+  base64: string;
+
+  @ApiProperty()
+  @IsString()
+  @IsNotEmpty()
+  @IsDefined()
+  name: string;
+}
 
 export class CreateBookDto {
   @ApiProperty()
@@ -38,6 +53,12 @@ export class CreateBookDto {
   @IsNotEmpty()
   @IsDefined()
   text: string;
+
+  @ApiProperty({ type: () => imageDto })
+  @IsObject()
+  @IsNotEmpty()
+  @IsDefined()
+  image: imageDto;
 }
 
 export class UpdateBookDto {

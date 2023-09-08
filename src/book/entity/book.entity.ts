@@ -41,6 +41,12 @@ export class Book {
   @Column()
   totalPage: number;
 
+  @Column({
+    type: 'text',
+    nullable: true,
+  })
+  imageUrl: string;
+
   @Column({ type: 'datetime', default: () => 'CURRENT_TIMESTAMP' })
   createdAt: Date;
 }

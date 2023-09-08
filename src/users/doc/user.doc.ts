@@ -31,3 +31,11 @@ export class UserDoc {
   @Type(() => Date)
   createAt: Date;
 }
+
+export class UserImageDoc {
+  @ApiProperty()
+  base64: string;
+
+  @ApiProperty()
+  name: string;
+}

@@ -29,4 +29,25 @@ export class BookRepository {
       if (!error) throw new NotFoundException('Book not found');
     }
   }
+
+  async getBookByAuthor(authorId: number) {
+    try {
+      const book = await this.bookRepository.find({
+        relations: {
+          bookPage: true,
+          author: true,
+          category: true,
+        },
+        where: {
+          author: {
+            id: authorId,
+          },
+        },
+      });
+      if (!book) throw new NotFoundException('Books not found');
+      return book;
+    } catch (error) {
+      if (!error) throw new NotFoundException('Book not found');
+    }
+  }
 }
