@@ -1,4 +1,4 @@
-import { Repository } from 'typeorm';
+import { In, Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { HttpException, Injectable, NotFoundException } from '@nestjs/common';
 import { Category } from '@/categoryEntity/category.entity';
@@ -52,15 +52,25 @@ export class CategoryService {
     return categoryPlain;
   }
 
-  async getOneById(id: number): Promise<CategoryDoc | HttpException> {
-    try {
-      const category: any = await this.categroyRepository.findOneOrFail({
-        where: { id },
-      });
-      const categoryPlain = plainToInstance(CategoryDoc, category);
-      return categoryPlain;
-    } catch (error) {
-      throw new NotFoundException('Category not found');
-    }
+  async getOneById(id: number): Promise<CategoryDoc> {
+    const category = await this.categroyRepository.findOneOrFail({
+      where: { id },
+    });
+
+    if (!category) throw new NotFoundException('Category not found');
+
+    const categoryPlain = plainToInstance(CategoryDoc, category);
+    return categoryPlain;
+  }
+
+  async getAllByIds(id: number[]): Promise<CategoryDoc[]> {
+    const category = await this.categroyRepository.find({
+      where: { id: In(id) },
+    });
+
+    if (!category) throw new NotFoundException('Category not found');
+
+    const categoryPlain = plainToInstance(CategoryDoc, category);
+    return categoryPlain;
   }
 }

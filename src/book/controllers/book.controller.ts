@@ -1,16 +1,18 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
-  HttpException,
   Param,
   Patch,
   Post,
-  UseGuards,
 } from '@nestjs/common';
 import { BookService } from '@/bookService/book.service';
-import { Book } from '@/bookEntity/book.entity';
-import { CreateBookDto, UpdateBookDto } from '@/bookDto/book.dto';
+import {
+  CreateBookDto,
+  UpdateBookDto,
+  UpdateBookPageDto,
+} from '@/bookDto/book.dto';
 import {
   ApiBadRequestResponse,
   ApiOkResponse,
@@ -18,7 +20,6 @@ import {
   ApiTags,
 } from '@nestjs/swagger';
 import { BookDoc } from '@/bookDoc/book.doc';
-import { AuthenticateGuard } from '@/authModule/utils/LocalGuard';
 
 @ApiTags('book')
 @Controller('book')
@@ -47,7 +48,7 @@ export class BookController {
     description: 'Book not found',
   })
   @Get()
-  getAllBook(): Promise<BookDoc[] | HttpException> {
+  getAllBook(): Promise<BookDoc[]> {
     return this.bookService.getAllBook();
   }
 
@@ -58,12 +59,13 @@ export class BookController {
   @ApiBadRequestResponse({
     description: 'Book not found',
   })
-  @Get(':id/page/:pageId')
+  @Get(':id/page/:pageId/type/:type')
   getBookAndPage(
     @Param('id') id: number,
     @Param('pageId') pageId: number,
-  ): Promise<BookDoc | HttpException> {
-    return this.bookService.getBookAndPage(id, pageId);
+    @Param('type') type: string,
+  ) {
+    return this.bookService.getBookPageByType(id, pageId, type);
   }
 
   @ApiOkResponse({
@@ -90,14 +92,88 @@ export class BookController {
   }
 
   @ApiOkResponse({
+    description: 'Book found',
+    type: [BookDoc],
+  })
+  @ApiBadRequestResponse({
+    description: 'Book not found',
+  })
+  @Post('/category')
+  getBookByCategory(@Body() ids: { ids: number[] }) {
+    return this.bookService.getBooksByCategory(ids.ids);
+  }
+
+  @ApiOkResponse({
+    description: 'Book found',
+    type: [BookDoc],
+  })
+  @ApiBadRequestResponse({
+    description: 'Book not found',
+  })
+  @Get('/category/:id')
+  getAllBookByCategory(@Param('id') id: number) {
+    return this.bookService.getAllBooksByCategory(id);
+  }
+
+  @ApiOkResponse({
     description: 'Book updated',
   })
   @ApiBadRequestResponse({
     description: 'Book cannot be updated',
   })
-  @UseGuards(AuthenticateGuard)
   @Patch(':id')
   updateBook(@Param('id') id: number, @Body() book: UpdateBookDto) {
     return this.bookService.updateBook(id, book);
+  }
+
+  @ApiOkResponse({
+    description: 'Book delete',
+  })
+  @ApiBadRequestResponse({
+    description: 'Book cannot be delete',
+  })
+  @Delete(':id')
+  deleteBook(@Param('id') id: number) {
+    return this.bookService.deleteBookById(id);
+  }
+
+  @ApiOkResponse({
+    description: 'Book page updated',
+  })
+  @ApiBadRequestResponse({
+    description: 'Book page cannot be update',
+  })
+  @Patch(':id/page/:pageId')
+  updateBookPage(
+    @Param('id') id: number,
+    @Param('pageId') pageId: number,
+    @Body() text: UpdateBookPageDto,
+  ) {
+    return this.bookService.updateBookPageById(id, pageId, text);
+  }
+
+  @ApiOkResponse({
+    description: 'Book page found',
+  })
+  @ApiBadRequestResponse({
+    description: 'Book page cannot be found',
+  })
+  @Get(':id/page/:pageId')
+  getBookPage(
+    @Param('id') id: number,
+    @Param('pageId') pageId: number,
+  ): Promise<BookDoc> {
+    return this.bookService.getBookPage(id, pageId);
+  }
+
+  @ApiOkResponse({
+    description: 'Book page found',
+  })
+  @ApiBadRequestResponse({
+    description: 'Book page cannot be found',
+  })
+  @Get('/name/:name')
+  getBookByName(@Param('name') name: string): Promise<BookDoc[]> {
+    return this.bookService.getBookByName(name);
   }
 }

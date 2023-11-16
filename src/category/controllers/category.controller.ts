@@ -38,9 +38,7 @@ export class CategoryController {
     status: 404,
   })
   @Get(':id')
-  getOneCategory(
-    @Param('id') id: number,
-  ): Promise<CategoryDoc | HttpException> {
+  getOneCategory(@Param('id') id: number): Promise<CategoryDoc> {
     return this.categoryServices.getOneById(id);
   }
 }

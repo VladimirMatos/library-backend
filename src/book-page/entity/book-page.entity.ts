@@ -18,7 +18,9 @@ export class BookPage {
   @Column()
   page: number;
 
-  @ManyToOne(() => Book, (book) => book.bookPage)
+  @ManyToOne(() => Book, (book) => book.bookPage, {
+    onDelete: 'CASCADE',
+  })
   @JoinColumn()
   book: Book;
 }

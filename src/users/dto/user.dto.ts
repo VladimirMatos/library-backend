@@ -45,7 +45,7 @@ export class CreateUserDto {
   @ApiProperty()
   @IsString()
   @IsNotEmpty()
-  @IsDefined()
+  @IsOptional()
   imageUrl: string;
 }
 

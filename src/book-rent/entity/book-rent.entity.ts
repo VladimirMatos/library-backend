@@ -13,11 +13,15 @@ export class BookRent {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @ManyToOne(() => User, (user) => user.bookRents)
+  @ManyToOne(() => User, (user) => user.bookRents, {
+    onDelete: 'CASCADE',
+  })
   @JoinColumn()
   user: User;
 
-  @ManyToOne(() => Book, (book) => book.bookRent)
+  @ManyToOne(() => Book, (book) => book.bookRent, {
+    onDelete: 'CASCADE',
+  })
   @JoinColumn()
   book: Book;
 

@@ -7,12 +7,16 @@ import {
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Book } from '@/bookEntity/book.entity';
-import { CreateBookDto, UpdateBookDto } from '@/bookDto/book.dto';
+import {
+  CreateBookDto,
+  UpdateBookDto,
+  UpdateBookPageDto,
+} from '@/bookDto/book.dto';
 import { BookPageService } from '@/bookPageService/book-page.service';
 import { UsersService } from '@/userService/users.service';
 import { CategoryService } from '@/categoryService/category.service';
 import { BookDoc } from '../doc/book.doc';
-import { plainToInstance } from 'class-transformer';
+import { plainToInstance, Type } from 'class-transformer';
 import { BookRepository } from '@/bookRepository/book.repository';
 import { uploadImage } from 'helper/upload';
 
@@ -53,7 +57,7 @@ export class BookService {
     return bookPlain;
   }
 
-  async getAllBook(): Promise<BookDoc[] | HttpException> {
+  async getAllBook(): Promise<BookDoc[]> {
     const book = await this.bookRepository.find({
       relations: {
         bookPage: true,
@@ -63,7 +67,7 @@ export class BookService {
     });
 
     if (!book) {
-      return new HttpException('Book not found', HttpStatus.NOT_FOUND);
+      throw new NotFoundException('Book not found');
     }
 
     const bookPlain = plainToInstance(BookDoc, book);
@@ -91,13 +95,52 @@ export class BookService {
   }
 
   async updateBook(id: number, book: UpdateBookDto) {
+    let url: string;
     await this.getBookById(id);
-
-    return this.bookRepository.update({ id }, book);
+    if (book.image) {
+      url = await uploadImage({ ...book.image, file: 'book' });
+    }
+    delete book.image;
+    return this.bookRepository.update({ id }, { ...book, imageUrl: url });
   }
 
-  async getBookAndPage(bookId: number, page: number): Promise<BookDoc> {
-    const book = await this.customReposity.getBookAndPage(bookId, page);
+  async getBookPageByType(bookId: number, page: number, type: string) {
+    const book = await this.customReposity.getBookPage(bookId, page);
+    if (!book) throw new NotFoundException('Books not found');
+    let convertBook = {};
+    if (type === 'HTML') {
+      convertBook = {
+        title: `<h1>${book.title}</h1>`,
+        id: book.id,
+        text: `<h1>${book.title}</h1>
+              <p>${book.bookPage[0].text}</p>`,
+      };
+    }
+
+    if (type === 'PLAIN') {
+      convertBook = {
+        title: book.title,
+        id: book.id,
+        text: book.bookPage[0].text,
+      };
+    }
+
+    if (type === 'JSON') {
+      convertBook = {
+        id: book.id,
+        text: `
+        {title: ${book.title},
+        text: ${book.bookPage[0].text} }`,
+      };
+    }
+
+    return convertBook;
+  }
+
+  async getBookPage(bookId: number, page: number): Promise<BookDoc> {
+    const book = await this.customReposity.getBookPage(bookId, page);
+
+    if (!book) throw new NotFoundException('Books not found');
 
     const bookPlain = plainToInstance(BookDoc, book);
     return bookPlain;
@@ -109,6 +152,54 @@ export class BookService {
     const book = await this.customReposity.getBookByAuthor(author.id);
 
     const bookPlain = plainToInstance(BookDoc, book);
+    return bookPlain;
+  }
+
+  async getBooksByCategory(categoryId: number[]) {
+    const category = await this.categoryServices.getAllByIds(categoryId);
+
+    const categoryIds = category.map(({ id }) => id);
+
+    const book = await this.customReposity.getBooksByCategory(categoryIds);
+
+    const bookPlain = plainToInstance(BookDoc, book);
+    return bookPlain;
+  }
+
+  async getAllBooksByCategory(categoryId: number) {
+    const category = await this.categoryServices.getOneById(categoryId);
+
+    const book = await this.customReposity.getAllBooksByCategory(category.id);
+    const books = {
+      books: book,
+      category: category.name,
+    };
+    const bookPlain = plainToInstance(BookDoc, books);
+    return bookPlain;
+  }
+
+  async deleteBookById(bookId: number) {
+    await this.bookRepository.delete(bookId);
+  }
+
+  async updateBookPageById(
+    bookId: number,
+    pageId: number,
+    text: UpdateBookPageDto,
+  ) {
+    const checkBook = await this.bookRepository.findOne({
+      where: { id: bookId },
+    });
+
+    if (!checkBook) throw new NotFoundException('Book not found');
+
+    await this.bookPageServices.updateBookPage(bookId, pageId, text);
+  }
+
+  async getBookByName(name: string): Promise<BookDoc[]> {
+    const books = await this.customReposity.getAllBooksByName(name);
+
+    const bookPlain = plainToInstance(BookDoc, books);
     return bookPlain;
   }
 }

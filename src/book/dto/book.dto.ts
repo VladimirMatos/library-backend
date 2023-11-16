@@ -80,9 +80,17 @@ export class UpdateBookDto {
   @IsOptional()
   categoryId?: number;
 
-  @ApiProperty()
-  @IsBoolean()
+  @ApiProperty({ type: () => imageDto })
+  @IsObject()
   @IsNotEmpty()
   @IsOptional()
-  status: boolean;
+  image: imageDto;
+}
+
+export class UpdateBookPageDto {
+  @ApiProperty()
+  @IsString()
+  @IsNotEmpty()
+  @IsOptional()
+  text?: string;
 }

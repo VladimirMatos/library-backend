@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { BookPage } from '../entity/book-page.entity';
@@ -36,5 +36,15 @@ export class BookPageService {
       BookPage: booksPages,
       count: count - 1,
     };
+  }
+
+  async updateBookPage(bookId: number, page: number, text) {
+    const bookPageCheck = await this.bookPageRepository.findOne({
+      where: { page, book: { id: bookId } },
+    });
+
+    if (!bookPageCheck) throw new NotFoundException('Book Page not found');
+
+    await this.bookPageRepository.update({ page, book: { id: bookId } }, text);
   }
 }

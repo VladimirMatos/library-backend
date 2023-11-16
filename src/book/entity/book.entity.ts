@@ -22,11 +22,15 @@ export class Book {
   @Column('text')
   description: string;
 
-  @ManyToOne(() => Category, (category) => category.book)
+  @ManyToOne(() => Category, (category) => category.book, {
+    onDelete: 'CASCADE',
+  })
   @JoinColumn()
   category: Category;
 
-  @ManyToOne(() => User, (user) => user.book)
+  @ManyToOne(() => User, (user) => user.book, {
+    onDelete: 'CASCADE',
+  })
   @JoinColumn()
   author: User;
 
