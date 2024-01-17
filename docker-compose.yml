@@ -1,0 +1,20 @@
+version: '3.7'
+
+services:
+  api:
+    container_name: ToDoList-api
+    restart: always
+    links:
+      - mongodb
+    build: .
+    ports:
+      - '3001:3005'
+  mongodb:
+    image: mongo
+    container_name: mongodb
+
+    volumes:
+      - ./mongodb/database:/data/db
+    ports:
+      - 27017:27017
+    restart: unless-stopped
